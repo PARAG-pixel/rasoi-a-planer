@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Cooking To-Do List & Meal Planner</title>
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Load Local Tailwind CSS (Offline Mandate) -->
+    <link rel="stylesheet" href="css/tailwind.min.css">
+    
+    <!-- Load Local Custom Style (For custom overrides, checkboxes, glassmorphism, animations) -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-full flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800/80 bg-slate-900/40 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-9 w-9 rounded-xl overflow-hidden shadow-md border border-amber-900/10 bg-white">
+                    <img src="assets/logo.png" alt="Rasoi Planner Logo" class="h-full w-full object-cover">
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight title-t1">
+                        Rasoi Planner
+                    </h1>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full font-mono">
+                Offline Mode
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-full md:w-80 flex-shrink-0">
+            <div class="interactive-card rounded-2xl border border-slate-800/80 bg-slate-900/30 p-6 shadow-xl sticky top-24">
+                <h2 class="text-lg font-bold text-slate-200 mb-6 flex items-center">
+                    <svg class="h-5 w-5 mr-2 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Preferences Setup
+                </h2>
+
+                <!-- Dynamic Diet Plate Illustration -->
+                <div class="mb-6 rounded-xl overflow-hidden border border-amber-500/20 bg-slate-950/60 h-40 relative flex items-center justify-center shadow-inner">
+                    <img id="diet-preview-img" src="assets/veg_diet.png" alt="Veg Diet Platter" class="w-full h-full object-cover transition-opacity duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                    <span id="diet-preview-label" class="absolute bottom-2.5 left-3 text-xs font-bold text-amber-400 uppercase tracking-wider">Vegetarian Plan Active</span>
+                </div>
+                
+                <form id="preferences-form" class="space-y-6" onsubmit="event.preventDefault();">
+                    
+                    <!-- Diet Preference -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Diet Profile</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="diet" value="Veg" checked class="sr-only peer">
+                                <div class="diet-option text-xs text-center py-2 px-3 rounded-lg border border-slate-800 bg-slate-950/40 text-slate-400 font-medium transition-all duration-200">
+                                    Veg
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="diet" value="Vegan" class="sr-only peer">
+                                <div class="diet-option text-xs text-center py-2 px-3 rounded-lg border border-slate-800 bg-slate-950/40 text-slate-400 font-medium transition-all duration-200">
+                                    Vegan
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="diet" value="Non-Veg" class="sr-only peer">
+                                <div class="diet-option text-xs text-center py-2 px-3 rounded-lg border border-slate-800 bg-slate-950/40 text-slate-400 font-medium transition-all duration-200">
+                                    Non-Veg
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Allergy Checklist -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Allergies & Exclusions</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 text-sm text-slate-300 cursor-pointer">
+                                <input type="checkbox" name="allergies" value="dairy" class="rounded border-slate-800 bg-slate-950/60 text-indigo-600 focus:ring-0 w-4.5 h-4.5">
+                                <span>Dairy-free <span class="text-slate-500 text-xs">(swaps Paneer/Ghee)</span></span>
+                            </label>
+                            <label class="flex items-center space-x-3 text-sm text-slate-300 cursor-pointer">
+                                <input type="checkbox" name="allergies" value="gluten" class="rounded border-slate-800 bg-slate-950/60 text-indigo-600 focus:ring-0 w-4.5 h-4.5">
+                                <span>Gluten-free <span class="text-slate-500 text-xs">(swaps Roti/Naan)</span></span>
+                            </label>
+                            <label class="flex items-center space-x-3 text-sm text-slate-300 cursor-pointer">
+                                <input type="checkbox" name="allergies" value="nuts" class="rounded border-slate-800 bg-slate-950/60 text-indigo-600 focus:ring-0 w-4.5 h-4.5">
+                                <span>Peanut & Nut-free</span>
+                            </label>
+                            <label class="flex items-center space-x-3 text-sm text-slate-300 cursor-pointer">
+                                <input type="checkbox" name="allergies" value="mustard" class="rounded border-slate-800 bg-slate-950/60 text-indigo-600 focus:ring-0 w-4.5 h-4.5">
+                                <span>Mustard-free</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Duration selector -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Plan Duration</label>
+                        <select name="days" class="w-full text-sm rounded-lg border border-slate-800 bg-slate-950/60 text-slate-300 py-2 px-3 focus:outline-none focus:border-indigo-500">
+                            <option value="1">1 Day Plan</option>
+                            <option value="3" selected>3 Days Plan</option>
+                            <option value="5">5 Days Plan</option>
+                            <option value="7">7 Days Plan</option>
+                        </select>
+                    </div>
+
+                    <button id="generate-btn" class="w-full flex items-center justify-center py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm transition-all duration-300 shadow-md shadow-indigo-600/20 active:scale-98">
+                        Generate Meal Plan
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Display Pane -->
+        <section class="flex-grow flex flex-col space-y-6">
+
+            <!-- Traditional Banana Leaf Banner -->
+            <div class="rounded-2xl overflow-hidden border border-amber-900/15 shadow-md flex flex-col md:flex-row bg-white">
+                <div class="flex-grow p-6 md:p-8 flex flex-col justify-center bg-white md:max-w-xl z-10">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-amber-600 font-mono">Traditional Indian Plating</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-1 title-t1 title-t1-large">
+                        Rasoi Cooking To-Do
+                    </h2>
+                    <p class="text-xs text-slate-600 mt-2">
+                        Personalized recipe orchestration and grocery zipping with traditional allergen-free Indian replacements.
+                    </p>
+                </div>
+                <div class="h-32 md:h-auto md:w-1/3 flex-shrink-0 relative">
+                    <img src="assets/banana_leaf_banner.png" alt="Banana Leaf Banner" class="w-full h-full object-cover">
+                    <div class="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent md:block hidden"></div>
+                </div>
+            </div>
+            
+            <!-- Tab Navigation (Hidden by default, displayed when a plan is loaded) -->
+            <div id="navigation-tabs" class="hidden border-b border-slate-800 flex space-x-6 overflow-x-auto whitespace-nowrap scrollbar-none pb-px">
+                <button data-tab="meals" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 transition-all duration-200">
+                    Meal Plan
+                </button>
+                <button data-tab="todo" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all duration-200">
+                    Cooking To-Do
+                </button>
+                <button data-tab="groceries" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all duration-200">
+                    Grocery List
+                </button>
+                <button data-tab="zip" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all duration-200">
+                    Smart Zip & Budget
+                </button>
+                <button data-tab="subs" class="tab-btn pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all duration-200">
+                    Substitutions Log
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-display" class="flex-grow">
+                
+                <!-- Empty/Initial State -->
+                <div id="empty-state" class="text-center py-20 px-6 rounded-2xl border border-dashed border-slate-800/80 bg-slate-900/10 flex flex-col items-center justify-center">
+                    <div class="h-14 w-14 rounded-full bg-slate-900/80 border border-slate-800 flex items-center justify-center text-slate-500 mb-4 shadow-inner">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-300 mb-1">No Meal Plan Generated</h3>
+                    <p class="text-sm text-slate-500 max-w-sm">
+                        Configure your dietary profile and allergies in the sidebar, then click "Generate Meal Plan" to build your custom schedule.
+                    </p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="hidden text-center py-20">
+                    <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-indigo-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+                    <p class="text-sm text-slate-400 mt-4 font-mono">Generating customized recipes and optimizing groceries...</p>
+                </div>
+
+                <!-- TAB: MEAL PLAN -->
+                <div id="tab-meals-content" class="hidden space-y-8 animate-fade-in">
+                    <!-- Day Schedule injected here -->
+                </div>
+
+                <!-- TAB: COOKING TO-DO LIST -->
+                <div id="tab-todo-content" class="hidden space-y-6 animate-fade-in">
+                    <!-- Checklists grouped by Day & Meal injected here -->
+                </div>
+
+                <!-- TAB: GROCERY LIST -->
+                <div id="tab-groceries-content" class="hidden space-y-6 animate-fade-in">
+                    <!-- Categories and checkbox items injected here -->
+                </div>
+
+                <!-- TAB: SMART ZIP & BUDGET -->
+                <div id="tab-zip-content" class="hidden space-y-6 animate-fade-in">
+                    <!-- Optimization cards, batch prep tips, and ZIP download button -->
+                </div>
+
+                <!-- TAB: SUBSTITUTIONS LOG -->
+                <div id="tab-subs-content" class="hidden space-y-6 animate-fade-in">
+                    <!-- Substitution table/cards injected here -->
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-600">
+            &copy; 2026 Rasoi Planner. Built with offline constraints. All recipe data computed locally.
+        </div>
+    </footer>
+
+    <!-- Load Local Libraries & App Scripts (Offline Mandate) -->
+    <script src="js/chart.umd.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
